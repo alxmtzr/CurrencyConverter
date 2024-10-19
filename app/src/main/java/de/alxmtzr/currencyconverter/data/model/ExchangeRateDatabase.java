@@ -1,5 +1,7 @@
 package de.alxmtzr.currencyconverter.data.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,6 +97,11 @@ public class ExchangeRateDatabase {
      * @return converted value
      */
     public double convert(double value, String currencyFrom, String currencyTo) {
-        return value / getExchangeRate(currencyFrom) * getExchangeRate(currencyTo);
+        double result = value / getExchangeRate(currencyFrom) * getExchangeRate(currencyTo);
+
+        // round to two decimal places
+        BigDecimal roundedResult = new BigDecimal(result).setScale(2, RoundingMode.HALF_UP);
+
+        return roundedResult.doubleValue();
     }
 }
