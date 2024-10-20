@@ -75,15 +75,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void calculateConversion(View view) {
-        String currencyFrom = spinnerFromValue.getSelectedItem().toString();
-        String currencyTo = spinnerToValue.getSelectedItem().toString();
+        CurrencyEntry currencyFromEntry = (CurrencyEntry) spinnerFromValue.getSelectedItem();
+        CurrencyEntry currencyToEntry = (CurrencyEntry) spinnerToValue.getSelectedItem();
         EditText editTextValue = findViewById(R.id.edit_text_from_value);
         TextView textViewResult = findViewById(R.id.textView_calculated_value);
 
         if (!editTextValue.getText().toString().isEmpty()) {
             Snackbar.make(view, "Calculating...", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             double value = Double.parseDouble(editTextValue.getText().toString());
-            double result = exchangeRateDatabase.convert(value, currencyFrom, currencyTo);
+            double result = exchangeRateDatabase.convert(value, currencyFromEntry.currencyName, currencyToEntry.currencyName);
             textViewResult.setText(String.valueOf(result));
         } else {
             Snackbar.make(view, "Please enter a value you want to convert.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
