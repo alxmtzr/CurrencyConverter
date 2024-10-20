@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.alxmtzr.currencyconverter.adapter.CurrencyListAdapter;
+import de.alxmtzr.currencyconverter.adapter.entry.CurrencyEntry;
 import de.alxmtzr.currencyconverter.data.model.ExchangeRateDatabase;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,8 +48,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupSpinners() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, currencyList);
-        adapter.setDropDownViewResource(androidx.appcompat.R.layout.select_dialog_singlechoice_material);
+        CurrencyEntry[] currencyEntries = new CurrencyEntry[currencyList.size()];
+
+        // Populate the array with CurrencyEntry objects
+        for (int i = 0; i < currencyEntries.length; i++) {
+            String currentCurrency = currencyList.get(i);
+            currencyEntries[i] = new CurrencyEntry(
+                    currentCurrency,
+                    exchangeRateDatabase.getExchangeRate(currentCurrency));
+        }
+
+        CurrencyListAdapter adapter = new CurrencyListAdapter(Arrays.asList(currencyEntries));
+
+// ArrayAdapter<String> adapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, currencyList);
+// adapter.setDropDownViewResource(androidx.appcompat.R.layout.select_dialog_singlechoice_material);
 
         spinnerFromValue = findViewById(R.id.spinner_from_value);
         spinnerFromValue.setAdapter(adapter);

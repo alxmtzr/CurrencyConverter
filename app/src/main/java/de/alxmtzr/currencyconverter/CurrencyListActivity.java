@@ -40,14 +40,5 @@ public class CurrencyListActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.currency_list_view);
         listView.setAdapter(adapter);
 
-
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-//                R.layout.list_view_item,
-//                R.id.list_text_view_item,
-//                currencies);
-//
-//        ListView listView = (ListView) findViewById(R.id.currency_list_view);
-//        listView.setAdapter(adapter);
-
     }
 }
