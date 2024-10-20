@@ -1,18 +1,14 @@
 package de.alxmtzr.currencyconverter;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Arrays;
 
-import de.alxmtzr.currencyconverter.data.model.CurrencyEntry;
+import de.alxmtzr.currencyconverter.adapter.CurrencyListAdapter;
+import de.alxmtzr.currencyconverter.adapter.entry.CurrencyEntry;
 import de.alxmtzr.currencyconverter.data.model.ExchangeRateDatabase;
 
 public class CurrencyListActivity extends AppCompatActivity {

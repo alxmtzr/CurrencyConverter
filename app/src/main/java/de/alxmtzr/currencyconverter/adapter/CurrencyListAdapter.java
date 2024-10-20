@@ -1,4 +1,4 @@
-package de.alxmtzr.currencyconverter;
+package de.alxmtzr.currencyconverter.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,7 +9,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import de.alxmtzr.currencyconverter.data.model.CurrencyEntry;
+import de.alxmtzr.currencyconverter.R;
+import de.alxmtzr.currencyconverter.adapter.entry.CurrencyEntry;
 
 public class CurrencyListAdapter extends BaseAdapter {
     private List<CurrencyEntry> data;

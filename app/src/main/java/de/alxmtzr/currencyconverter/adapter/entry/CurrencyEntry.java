@@ -1,4 +1,4 @@
-package de.alxmtzr.currencyconverter.data.model;
+package de.alxmtzr.currencyconverter.adapter.entry;
 
 public class CurrencyEntry {
     public String currencyName;
