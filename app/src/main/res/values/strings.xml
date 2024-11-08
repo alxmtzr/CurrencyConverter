@@ -3,4 +3,9 @@
     <string name="app_title">Currency Converter</string>
     <string name="calculate_button">Calculate</string>
     <string name="to_value_default_text">0.00</string>
+    <string name="currency_list">Currency List</string>
+    <string name="calculate">Calculate</string>
+    <string name="exchange_rate">exchange rate</string>
+    <string name="currency">currency</string>
+    <string name="please_enter_a_value_you_want_to_convert">Please enter a value you want to convert.</string>
 </resources>

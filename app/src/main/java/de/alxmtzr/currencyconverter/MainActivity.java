@@ -82,12 +82,11 @@ public class MainActivity extends AppCompatActivity {
         TextView textViewResult = findViewById(R.id.textView_calculated_value);
 
         if (!editTextValue.getText().toString().isEmpty()) {
-            Snackbar.make(view, "Calculating...", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             double value = Double.parseDouble(editTextValue.getText().toString());
             double result = exchangeRateDatabase.convert(value, currencyFromEntry.currencyName, currencyToEntry.currencyName);
             textViewResult.setText(String.valueOf(result));
         } else {
-            Snackbar.make(view, "Please enter a value you want to convert.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            Snackbar.make(view, R.string.please_enter_a_value_you_want_to_convert, Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
     }
 

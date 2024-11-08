@@ -12,11 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        app:title="Currency List"
+        app:title="@string/currency_list"
         app:titleTextColor="@android:color/white"
         app:titleMarginStart="30dp"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/currency_list_view"

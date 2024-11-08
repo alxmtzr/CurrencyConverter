@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:textSize="15dp"
-        android:text="Calculate"
+        android:text="@string/calculate"
         android:backgroundTint="?attr/colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">WährungsRechner</string>
+    <string name="app_title">Währungsrechner</string>
+    <string name="calculate_button">Berechnen</string>
+    <string name="to_value_default_text">0.00</string>
+    <string name="currency_list">Währungsliste</string>
+    <string name="calculate">Berechnen</string>
+    <string name="exchange_rate">Wechselkurs</string>
+    <string name="currency">Währung</string>
+    <string name="please_enter_a_value_you_want_to_convert">Bitte geben Sie einen Wert ein, den Sie umrechnen möchten.</string>
+</resources>
