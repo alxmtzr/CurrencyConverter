@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initializeComponents();
-        setupSpinners();
         initToolbar();
+        setupSpinners();
         acceptMaxTwoDecimalPlaces();
         setupCalculateButton();
     }
@@ -94,10 +94,12 @@ public class MainActivity extends AppCompatActivity {
         EditText editTextValue = findViewById(R.id.edit_text_from_value);
         editTextValue.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -114,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
+
+        // Set the toolbar as the app bar for the activity
         setSupportActionBar(toolbar);
     }
 

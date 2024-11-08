@@ -5,6 +5,6 @@
         android:id="@+id/action_settings"
         android:title="Settings"
         android:icon="@android:drawable/ic_menu_more"
-        app:showAsAction="never" /> <!-- Setze auf "never", um es im Overflow-Menü zu haben -->
+        app:showAsAction="never" /> <!-- set to "never", to show item in overflow menu -->
 
 </menu>

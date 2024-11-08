@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class ExchangeRateDatabase {
     // Exchange rates to EURO - price for 1 Euro
-     private final static ExchangeRate[] RATES = {
+    private final static ExchangeRate[] RATES = {
             new ExchangeRate("EUR", "Bruxelles", 1.0),
             new ExchangeRate("USD", "Washington", 1.0845),
             new ExchangeRate("JPY", "Tokyo", 130.02),
@@ -67,6 +67,7 @@ public class ExchangeRateDatabase {
 
     /**
      * Gets exchange rate for currency (equivalent for one Euro)
+     *
      * @param currency Currency name (three letters)
      * @return Exchange rate for the currency
      */
@@ -76,7 +77,8 @@ public class ExchangeRateDatabase {
 
     /**
      * Sets exchange rate for currency (equivalent for one Euro)
-     * @param currency Currency name (three letters)
+     *
+     * @param currency     Currency name (three letters)
      * @param exchangeRate Exchange rate for one euro
      */
     public void setExchangeRate(String currency, double exchangeRate) {
@@ -85,6 +87,7 @@ public class ExchangeRateDatabase {
 
     /**
      * Returns the capital of the country issuing the currency
+     *
      * @param currency Currency name (three letters)
      * @return Capital of the country issuing the currency
      */
@@ -94,13 +97,14 @@ public class ExchangeRateDatabase {
 
     /**
      * Converts a value from a currency to another one
+     *
      * @return converted value
      */
     public double convert(double value, String currencyFrom, String currencyTo) {
         double result = value / getExchangeRate(currencyFrom) * getExchangeRate(currencyTo);
 
         // round to two decimal places
-        BigDecimal roundedResult = new BigDecimal(result).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal roundedResult = BigDecimal.valueOf(result).setScale(2, RoundingMode.HALF_UP);
 
         return roundedResult.doubleValue();
     }
