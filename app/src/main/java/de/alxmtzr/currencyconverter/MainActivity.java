@@ -53,15 +53,15 @@ public class MainActivity extends AppCompatActivity {
         // Populate the array with CurrencyEntry objects
         for (int i = 0; i < currencyEntries.length; i++) {
             String currentCurrency = currencyList.get(i);
+            int flagImageId = getResources().getIdentifier("flag_" + currentCurrency.toLowerCase(),
+                    "drawable", getPackageName());
             currencyEntries[i] = new CurrencyEntry(
+                    flagImageId,
                     currentCurrency,
                     exchangeRateDatabase.getExchangeRate(currentCurrency));
         }
 
         CurrencyListAdapter adapter = new CurrencyListAdapter(Arrays.asList(currencyEntries));
-
-// ArrayAdapter<String> adapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, currencyList);
-// adapter.setDropDownViewResource(androidx.appcompat.R.layout.select_dialog_singlechoice_material);
 
         spinnerFromValue = findViewById(R.id.spinner_from_value);
         spinnerFromValue.setAdapter(adapter);

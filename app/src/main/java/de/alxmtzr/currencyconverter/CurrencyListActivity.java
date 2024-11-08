@@ -30,14 +30,17 @@ public class CurrencyListActivity extends AppCompatActivity {
         // Populate the array with CurrencyEntry objects
         for (int i = 0; i < currencyEntries.length; i++) {
             String currentCurrency = currencies[i];
+            int flagImageId = getResources().getIdentifier("flag_" + currentCurrency.toLowerCase(),
+                    "drawable", getPackageName());
             currencyEntries[i] = new CurrencyEntry(
+                    flagImageId,
                     currentCurrency,
                     exchangeRateDatabase.getExchangeRate(currentCurrency));
         }
 
         CurrencyListAdapter adapter = new CurrencyListAdapter(Arrays.asList(currencyEntries));
 
-        ListView listView = (ListView) findViewById(R.id.currency_list_view);
+        ListView listView = findViewById(R.id.currency_list_view);
         listView.setAdapter(adapter);
 
     }
