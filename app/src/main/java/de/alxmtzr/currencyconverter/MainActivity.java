@@ -1,5 +1,6 @@
 package de.alxmtzr.currencyconverter;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -116,6 +117,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
+
+        // set overflow icon color
+        Drawable overflowIcon = toolbar.getOverflowIcon();
+        if (overflowIcon != null) {
+            overflowIcon.setTint(getResources().getColor(R.color.md_theme_onPrimary));
+        }
 
         // Set the toolbar as the app bar for the activity
         setSupportActionBar(toolbar);

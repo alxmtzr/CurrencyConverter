@@ -5,5 +5,5 @@
         android:id="@+id/action_settings"
         android:title="@string/currency_list"
         android:icon="@drawable/ic_overflow_menu"
-        app:showAsAction="ifRoom" /> <!-- set to "never", to show item in overflow menu -->
+        app:showAsAction="never" /> <!-- set to "never", to show item in overflow menu -->
 </menu>
