@@ -1,6 +1,7 @@
 package de.alxmtzr.currencyconverter;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import java.util.Arrays;
 
@@ -22,6 +26,8 @@ public class CurrencyListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_list);
+
+        initToolbar();
 
         // init database
         exchangeRateDatabase = new ExchangeRateDatabase();
@@ -64,4 +70,32 @@ public class CurrencyListActivity extends AppCompatActivity {
         });
 
     }
+
+    private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar_currency_list);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            Drawable backArrow = AppCompatResources.getDrawable(this, R.drawable.ic_arrow_back);
+            if (backArrow != null) {
+                backArrow.setTint(ContextCompat.getColor(this, R.color.md_theme_onPrimary)); // change color
+                getSupportActionBar().setHomeAsUpIndicator(backArrow);
+            }
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        if (!getOnBackPressedDispatcher().hasEnabledCallbacks()) {
+            // No custom back-pressed logic present, execute default behavior
+            finish(); // cancel current activity
+        } else {
+            // active custom logic
+            getOnBackPressedDispatcher().onBackPressed();
+        }
+        return true;
+    }
+
 }
