@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -135,7 +136,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+
+        menu.findItem(R.id.action_share).setOnMenuItemClickListener(item -> {
+            // get conversion results for sharing
+            CurrencyEntry currencyFromEntry = (CurrencyEntry) spinnerFromValue.getSelectedItem();
+            CurrencyEntry currencyToEntry = (CurrencyEntry) spinnerToValue.getSelectedItem();
+            EditText editTextFromValue = findViewById(R.id.edit_text_from_value);
+            String fromValue = editTextFromValue.getText().toString().isBlank() ? "0" : editTextFromValue.getText().toString();
+            String toValue = ((TextView) findViewById(R.id.textView_calculated_value)).getText().toString();
+
+            String sharedText = getString(R.string.currency_converter_says) +
+                    fromValue + " " + currencyFromEntry.currencyName +
+                    getString(R.string.are) +
+                    toValue + " " + currencyToEntry.currencyName;
+
+            // share the conversion results
+            shareText(sharedText);
+            return true;
+        });
+
+
         return true;
+    }
+
+    private void shareText(String text) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+
+        startActivity(Intent.createChooser(shareIntent, "Share using"));
     }
 
     @Override

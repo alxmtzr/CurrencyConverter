@@ -8,4 +8,7 @@
     <string name="exchange_rate">exchange rate</string>
     <string name="currency">currency</string>
     <string name="please_enter_a_value_you_want_to_convert">Please enter a value you want to convert.</string>
+    <string name="share">Share</string>
+    <string name="currency_converter_says">"Currency Converter says: "</string>
+    <string name="are">" are "</string>
 </resources>

@@ -9,4 +9,7 @@
     <string name="exchange_rate">Wechselkurs</string>
     <string name="currency">Währung</string>
     <string name="please_enter_a_value_you_want_to_convert">Bitte geben Sie einen Wert ein, den Sie umrechnen möchten.</string>
+    <string name="share">Teilen</string>
+    <string name="currency_converter_says">"Währungsrechner sagt: "</string>
+    <string name="are">" sind "</string>
 </resources>
