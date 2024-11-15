@@ -1,6 +1,10 @@
 package de.alxmtzr.currencyconverter;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,6 +46,22 @@ public class CurrencyListActivity extends AppCompatActivity {
 
         ListView listView = findViewById(R.id.currency_list_view);
         listView.setAdapter(adapter);
+
+        // set on item click listener for list view
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                CurrencyEntry currencyEntry = (CurrencyEntry) adapterView.getItemAtPosition(i);
+                String currencyName = currencyEntry.currencyName;
+                String searchQuery = exchangeRateDatabase.getCapital(currencyName);
+
+                Intent mapIntent = new Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("geo:0,0`?q=" + searchQuery)
+                );
+                startActivity(mapIntent);
+            }
+        });
 
     }
 }
