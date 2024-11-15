@@ -1,10 +1,13 @@
 package de.alxmtzr.currencyconverter;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -132,5 +136,18 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_currency_list) {
+            // navigate to the currency list activity
+            Intent currencyIntent = new Intent(this, CurrencyListActivity.class);
+            startActivity(currencyIntent);
+            return true;
+        } else {
+            // the user's action was not recognized. Invoke the superclass to handle it.
+            return super.onOptionsItemSelected(item);
+        }
     }
 }
