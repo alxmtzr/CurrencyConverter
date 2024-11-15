@@ -27,5 +27,9 @@
         <activity
             android:name=".CurrencyListActivity"
             android:exported="true" />
+        <activity
+            android:name=".EditCurrencyActivity"
+            android:exported="true" />
     </application>
+
 </manifest>

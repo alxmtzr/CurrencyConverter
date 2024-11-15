@@ -11,4 +11,8 @@
     <string name="share">Share</string>
     <string name="currency_converter_says">"Currency Converter says: "</string>
     <string name="are">" are "</string>
+    <string name="exchange_rate_updated">Exchange rate updated</string>
+    <string name="editing_mode">"Editing mode "</string>
+    <string name="enabled">enabled</string>
+    <string name="disabled">disabled</string>
 </resources>

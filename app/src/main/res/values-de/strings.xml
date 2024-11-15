@@ -12,4 +12,8 @@
     <string name="share">Teilen</string>
     <string name="currency_converter_says">"Währungsrechner sagt: "</string>
     <string name="are">" sind "</string>
+    <string name="exchange_rate_updated">Wechselkurs geändert</string>
+    <string name="editing_mode">"Bearbeitungsmodus "</string>
+    <string name="enabled">aktiv</string>
+    <string name="disabled">inaktiv</string>
 </resources>
