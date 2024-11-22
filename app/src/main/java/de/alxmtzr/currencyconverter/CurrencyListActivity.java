@@ -1,7 +1,6 @@
 package de.alxmtzr.currencyconverter;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +11,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -27,6 +30,7 @@ import de.alxmtzr.currencyconverter.data.model.ExchangeRateDatabase;
 public class CurrencyListActivity extends AppCompatActivity {
     private ExchangeRateDatabase exchangeRateDatabase;
     private boolean isEditingModeEnabled = false;
+    private CurrencyListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +42,14 @@ public class CurrencyListActivity extends AppCompatActivity {
         // init database
         exchangeRateDatabase = new ExchangeRateDatabase();
 
-        updateCurrencyList();
+        initializeCurrencyList();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateCurrencyList();
-    }
-
-    private void updateCurrencyList() {
+    private void initializeCurrencyList() {
         String[] currencies = exchangeRateDatabase.getCurrencies();
         CurrencyEntry[] currencyEntries = new CurrencyEntry[currencies.length];
 
+        // Populate the array with CurrencyEntry objects
         for (int i = 0; i < currencyEntries.length; i++) {
             String currentCurrency = currencies[i];
             int flagImageId = getResources().getIdentifier("flag_" + currentCurrency.toLowerCase(),
@@ -61,17 +60,20 @@ public class CurrencyListActivity extends AppCompatActivity {
                     exchangeRateDatabase.getExchangeRate(currentCurrency));
         }
 
-        CurrencyListAdapter adapter = new CurrencyListAdapter(Arrays.asList(currencyEntries));
+        // Create the adapter
+        adapter = new CurrencyListAdapter(Arrays.asList(currencyEntries));
         ListView listView = findViewById(R.id.currency_list_view);
         listView.setAdapter(adapter);
 
+        // handle on item click
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                CurrencyEntry currencyEntry = (CurrencyEntry) adapterView.getItemAtPosition(i);
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                CurrencyEntry currencyEntry = (CurrencyEntry) adapterView.getItemAtPosition(position);
                 String currencyName = currencyEntry.currencyName;
-                String searchQuery = exchangeRateDatabase.getCapital(currencyName);
                 if (!isEditingModeEnabled) {
+                    // get the capital of the country
+                    String searchQuery = exchangeRateDatabase.getCapital(currencyName);
                     // navigate to maps activity
                     Intent mapIntent = new Intent(
                             Intent.ACTION_VIEW,
@@ -79,16 +81,44 @@ public class CurrencyListActivity extends AppCompatActivity {
                     );
                     startActivity(mapIntent);
                 } else {
-                    // navigate to edit currency activity
+                    // editing mode enabled -> navigate to edit currency activity
                     Intent editCurrencyIntent = new Intent(CurrencyListActivity.this, EditCurrencyActivity.class);
                     editCurrencyIntent.putExtra("currencyName", currencyName);
                     editCurrencyIntent.putExtra("exchangeRate", currencyEntry.exchangeRate);
+                    editCurrencyIntent.putExtra("listPosition", position);
 
-                    startActivity(editCurrencyIntent);
+                    editCurrencyActivityResultLauncher.launch(editCurrencyIntent);
                 }
             }
         });
     }
+
+    private final ActivityResultLauncher<Intent> editCurrencyActivityResultLauncher = registerForActivityResult(
+            // give an intent to start
+            new ActivityResultContracts.StartActivityForResult(),
+            // get an activity result consisting of an intent
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    // process the result
+                    double newExchangeRate = result.getData().getDoubleExtra("newExchangeRate", -1);
+                    int position = result.getData().getIntExtra("listPosition", -1);
+
+                    if (position > -1 && newExchangeRate > -1) {
+                        CurrencyEntry currencyEntry = (CurrencyEntry) adapter.getItem(position);
+                        currencyEntry.exchangeRate = newExchangeRate;
+
+                        // notify the adapter that the data has changed
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(
+                                CurrencyListActivity.this,
+                                "Error while updating the exchange rate",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+    );
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar_currency_list);

@@ -17,33 +17,18 @@
         app:titleMarginStart="30dp"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewCurrency"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/editTextExchangeRate"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Currency"
+        android:gravity="center"
+        android:imeOptions="actionDone"
+        android:inputType="numberDecimal"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_edit_currency" />
-
-    <EditText
-        android:id="@+id/editTextConversionRate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCurrency" />
-
-    <Button
-        android:id="@+id/buttonChangeConversionRate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Change Rate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextConversionRate" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
