@@ -1,6 +1,7 @@
 package de.alxmtzr.currencyconverter;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -126,8 +127,18 @@ public class CurrencyListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_edit) {
-            // navigate to the edit list activity
+            // enable or disable editing mode
             isEditingModeEnabled = !isEditingModeEnabled;
+
+            // Get the icon and change its color
+            Drawable icon = item.getIcon();
+            if (icon != null) {
+                int color = isEditingModeEnabled
+                        ? ContextCompat.getColor(this, R.color.ic_app_logo_background) // Color for enabled mode
+                        : ContextCompat.getColor(this, R.color.md_theme_onPrimary); // Color for disabled mode
+                icon.setTint(color); // Set the new color
+            }
+
             Toast.makeText(this, getString(R.string.editing_mode) +
                     (isEditingModeEnabled ? getString(R.string.enabled) : getString(R.string.disabled)), Toast.LENGTH_SHORT).show();
             return true;
