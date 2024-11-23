@@ -79,6 +79,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_to_value" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

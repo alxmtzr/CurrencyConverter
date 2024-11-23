@@ -16,4 +16,7 @@
     <string name="editing_mode">"Bearbeitungsmodus "</string>
     <string name="enabled">aktiv</string>
     <string name="disabled">inaktiv</string>
+    <string name="updating_rates">Wechselkurse werden aktualisiert...</string>
+    <string name="rates_updated">Wechselkurse aktualisiert</string>
+    <string name="refresh_rates">Raten aktualisieren</string>
 </resources>

@@ -11,8 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +34,8 @@ import de.alxmtzr.currencyconverter.data.remote.FloatRatesApi;
 
 public class MainActivity extends AppCompatActivity {
     private ExchangeRateDatabase exchangeRateDatabase;
+    private ProgressBar progressBar;
+    private TextView textViewProgress;
     private Spinner spinnerFromValue;
     private Spinner spinnerToValue;
     private List<String> currencyList;
@@ -179,8 +183,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(currencyIntent);
             return true;
         } else if (item.getItemId() == R.id.action_refresh_rates) {
+            Toast.makeText(this, R.string.updating_rates, Toast.LENGTH_SHORT).show();
             // refresh exchange rates from the API
             updateCurrencies();
+            Toast.makeText(this, R.string.rates_updated, Toast.LENGTH_SHORT).show();
             return true;
         } else {
             // the user's action was not recognized. Invoke the superclass to handle it.
