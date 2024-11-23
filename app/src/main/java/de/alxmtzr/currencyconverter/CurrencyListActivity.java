@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 import de.alxmtzr.currencyconverter.adapter.CurrencyListAdapter;
 import de.alxmtzr.currencyconverter.adapter.entry.CurrencyEntry;
-import de.alxmtzr.currencyconverter.data.model.ExchangeRateDatabase;
+import de.alxmtzr.currencyconverter.data.local.db.ExchangeRateDatabase;
 
 public class CurrencyListActivity extends AppCompatActivity {
     private ExchangeRateDatabase exchangeRateDatabase;

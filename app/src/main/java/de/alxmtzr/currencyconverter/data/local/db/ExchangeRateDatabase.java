@@ -1,10 +1,12 @@
-package de.alxmtzr.currencyconverter.data.model;
+package de.alxmtzr.currencyconverter.data.local.db;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import de.alxmtzr.currencyconverter.data.model.ExchangeRate;
 
 public class ExchangeRateDatabase {
     // Exchange rates to EURO - price for 1 Euro

@@ -3,6 +3,7 @@ package de.alxmtzr.currencyconverter;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -25,18 +26,25 @@ import java.util.List;
 
 import de.alxmtzr.currencyconverter.adapter.CurrencyListAdapter;
 import de.alxmtzr.currencyconverter.adapter.entry.CurrencyEntry;
-import de.alxmtzr.currencyconverter.data.model.ExchangeRateDatabase;
+import de.alxmtzr.currencyconverter.data.local.db.ExchangeRateDatabase;
+import de.alxmtzr.currencyconverter.data.model.CurrencyDTO;
+import de.alxmtzr.currencyconverter.data.remote.FloatRatesApi;
 
 public class MainActivity extends AppCompatActivity {
     private ExchangeRateDatabase exchangeRateDatabase;
     private Spinner spinnerFromValue;
     private Spinner spinnerToValue;
     private List<String> currencyList;
+    CurrencyListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // temporary deactivate control mechanism
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         initializeComponents();
         initToolbar();
@@ -64,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                     exchangeRateDatabase.getExchangeRate(currentCurrency));
         }
 
-        CurrencyListAdapter adapter = new CurrencyListAdapter(Arrays.asList(currencyEntries));
+        adapter = new CurrencyListAdapter(Arrays.asList(currencyEntries));
 
         spinnerFromValue = findViewById(R.id.spinner_from_value);
         spinnerFromValue.setAdapter(adapter);
@@ -170,9 +178,42 @@ public class MainActivity extends AppCompatActivity {
             Intent currencyIntent = new Intent(this, CurrencyListActivity.class);
             startActivity(currencyIntent);
             return true;
+        } else if (item.getItemId() == R.id.action_refresh_rates) {
+            // refresh exchange rates from the API
+            updateCurrencies();
+            return true;
         } else {
             // the user's action was not recognized. Invoke the superclass to handle it.
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void updateCurrencies() {
+        FloatRatesApi floatRatesApi = new FloatRatesApi();
+        List<CurrencyDTO> currencyDTOList = floatRatesApi.queryCurrencies();
+
+        // update the exchange rates in the database
+        for (CurrencyDTO entry : currencyDTOList) {
+            String currencyName = entry.code.toUpperCase();
+            double exchangeRate = roundToFourDecimalPlaces(entry.rate);
+
+            // only update the exchange rate if the currency is in the list
+            if (currencyList.contains(currencyName)) {
+                exchangeRateDatabase.setExchangeRate(currencyName, exchangeRate);
+            }
+        }
+
+        // update the exchange rates in the adapter
+        for (int i = 0; i < adapter.getCount(); i++) {
+            CurrencyEntry currencyEntry = (CurrencyEntry) adapter.getItem(i);
+            String currencyName = currencyEntry.currencyName;
+            currencyEntry.exchangeRate = exchangeRateDatabase.getExchangeRate(currencyName);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    // helper method to round a double to four decimal places
+    private double roundToFourDecimalPlaces(double value) {
+        return Math.round(value * 10000.0) / 10000.0;
     }
 }

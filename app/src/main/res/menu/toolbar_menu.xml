@@ -13,4 +13,9 @@
         android:title="@string/currency_list"
         android:icon="@drawable/ic_overflow_menu"
         app:showAsAction="never" /> <!-- set to "never", to show item in overflow menu -->
+    <item
+        android:id="@+id/action_refresh_rates"
+        android:title="Refresh Rates"
+        android:icon="@drawable/ic_overflow_menu"
+        app:showAsAction="never" /> <!-- set to "never", to show item in overflow menu -->
 </menu>
