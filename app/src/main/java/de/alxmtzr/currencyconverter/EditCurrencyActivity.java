@@ -13,7 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 public class EditCurrencyActivity extends AppCompatActivity {
     private String currencyName;
-    private double exchangeRate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,7 @@ public class EditCurrencyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_currency);
 
         currencyName = getIntent().getStringExtra("currencyName");
-        exchangeRate = getIntent().getDoubleExtra("exchangeRate", -1);
+        double exchangeRate = getIntent().getDoubleExtra("exchangeRate", -1);
 
         initToolbar();
 
