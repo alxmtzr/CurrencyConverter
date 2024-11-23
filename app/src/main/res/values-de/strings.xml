@@ -19,4 +19,5 @@
     <string name="updating_rates">Wechselkurse werden aktualisiert...</string>
     <string name="rates_updated">Wechselkurse aktualisiert</string>
     <string name="refresh_rates">Raten aktualisieren</string>
+    <string name="error_while_updating_data">Fehler beim Aktualisieren der Raten</string>
 </resources>

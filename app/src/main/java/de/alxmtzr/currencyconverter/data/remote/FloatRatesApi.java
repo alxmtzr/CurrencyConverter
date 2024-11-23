@@ -51,6 +51,7 @@ public class FloatRatesApi {
 
         } catch (IOException exception) {
             Log.e("FloatRatesApi", "Error while fetching data from FloatRates API", exception);
+            throw new RuntimeException("Error while fetching data from FloatRates API", exception);
         } catch (JSONException exception) {
             Log.e("FloatRatesApi", "Error while parsing JSON data", exception);
         }

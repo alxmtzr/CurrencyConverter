@@ -18,4 +18,5 @@
     <string name="updating_rates">Updating Rates...</string>
     <string name="rates_updated">Rates Updated</string>
     <string name="refresh_rates">Refresh Rates</string>
+    <string name="error_while_updating_data">Error while updating data.</string>
 </resources>

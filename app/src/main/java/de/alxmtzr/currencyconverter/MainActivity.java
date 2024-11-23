@@ -183,10 +183,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(currencyIntent);
             return true;
         } else if (item.getItemId() == R.id.action_refresh_rates) {
-            Toast.makeText(this, R.string.updating_rates, Toast.LENGTH_SHORT).show();
             // refresh exchange rates from the API
             updateCurrencies();
-            Toast.makeText(this, R.string.rates_updated, Toast.LENGTH_SHORT).show();
             return true;
         } else {
             // the user's action was not recognized. Invoke the superclass to handle it.
@@ -195,8 +193,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateCurrencies() {
+        Toast.makeText(this, R.string.updating_rates, Toast.LENGTH_SHORT).show();
         FloatRatesApi floatRatesApi = new FloatRatesApi();
-        List<CurrencyDTO> currencyDTOList = floatRatesApi.queryCurrencies();
+        List<CurrencyDTO> currencyDTOList;
+        try {
+            currencyDTOList = floatRatesApi.queryCurrencies();
+        } catch (RuntimeException e) {
+            Toast.makeText(this, R.string.error_while_updating_data, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // update the exchange rates in the database
         for (CurrencyDTO entry : currencyDTOList) {
@@ -216,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
             currencyEntry.exchangeRate = exchangeRateDatabase.getExchangeRate(currencyName);
         }
         adapter.notifyDataSetChanged();
+        Toast.makeText(this, R.string.rates_updated, Toast.LENGTH_SHORT).show();
     }
 
     // helper method to round a double to four decimal places
