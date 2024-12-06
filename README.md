@@ -31,7 +31,3 @@ from an API.
 2. Open the project in Android Studio.
 3. Build the project using Gradle.
 4. Run the application on an Android device or emulator.
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for more details.
