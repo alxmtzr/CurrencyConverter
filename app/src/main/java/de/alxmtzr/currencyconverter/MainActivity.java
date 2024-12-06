@@ -1,6 +1,8 @@
 package de.alxmtzr.currencyconverter;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -33,9 +35,12 @@ import de.alxmtzr.currencyconverter.data.model.CurrencyDTO;
 import de.alxmtzr.currencyconverter.data.remote.FloatRatesApi;
 
 public class MainActivity extends AppCompatActivity {
+    // constants
+    private static final String FROM_SPINNER_POSITION = "fromSpinnerPosition";
+    private static final String TO_SPINNER_POSITION = "toSpinnerPosition";
+    private static final String FROM_VALUE = "fromValue";
+
     private ExchangeRateDatabase exchangeRateDatabase;
-    private ProgressBar progressBar;
-    private TextView textViewProgress;
     private Spinner spinnerFromValue;
     private Spinner spinnerToValue;
     private List<String> currencyList;
@@ -55,6 +60,48 @@ public class MainActivity extends AppCompatActivity {
         setupSpinners();
         acceptMaxTwoDecimalPlaces();
         setupCalculateButton();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // save the current selection to preferences
+        SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        // retrieve the current selection
+        int fromCurrencySelectedItemPosition = spinnerFromValue.getSelectedItemPosition();
+        int toCurrencySelectedItemPosition = spinnerToValue.getSelectedItemPosition();
+        EditText editText = findViewById(R.id.edit_text_from_value);
+        String fromValue = editText.getText().toString();
+
+        // save current selection to prefs
+        editor.putInt(FROM_SPINNER_POSITION, fromCurrencySelectedItemPosition);
+        editor.putInt(TO_SPINNER_POSITION, toCurrencySelectedItemPosition);
+        editor.putString(FROM_VALUE, fromValue);
+
+        editor.apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // restore the previous selection from preferences
+        SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+
+        // retrieve the previous selection from shared prefs
+        int fromCurrencySelectedItemPosition = prefs.getInt(FROM_SPINNER_POSITION, 0);
+        int toCurrencySelectedItemPosition = prefs.getInt(TO_SPINNER_POSITION, 0);
+        String fromValue = prefs.getString(FROM_VALUE, "");
+
+        // restore the previous selection
+        spinnerFromValue.setSelection(fromCurrencySelectedItemPosition);
+        spinnerToValue.setSelection(toCurrencySelectedItemPosition);
+        EditText editText = findViewById(R.id.edit_text_from_value);
+        editText.setText(fromValue);
+
     }
 
     private void initializeComponents() {
