@@ -1,6 +1,8 @@
 package de.alxmtzr.currencyconverter;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -57,7 +59,7 @@ public class CurrencyListActivity extends AppCompatActivity {
             currencyEntries[i] = new CurrencyEntry(
                     flagImageId,
                     currentCurrency,
-                    exchangeRateDatabase.getExchangeRate(currentCurrency));
+                    getExchangeRate(currentCurrency));
         }
 
         // Create the adapter
@@ -93,6 +95,17 @@ public class CurrencyListActivity extends AppCompatActivity {
         });
     }
 
+    private double getExchangeRate(String currentCurrency) {
+        SharedPreferences prefs = getSharedPreferences("shared_prefs_rates", Context.MODE_PRIVATE);
+
+        // return either the saved exchange rate in prefs or the default exchange rate from ExchangeRateDatabase
+        double rate = Double.parseDouble(prefs.getString(currentCurrency, "0"));
+        if (rate == 0) {
+            rate = exchangeRateDatabase.getExchangeRate(currentCurrency);
+        }
+        return rate;
+    }
+
     private final ActivityResultLauncher<Intent> editCurrencyActivityResultLauncher = registerForActivityResult(
             // give an intent to start
             new ActivityResultContracts.StartActivityForResult(),
@@ -103,10 +116,16 @@ public class CurrencyListActivity extends AppCompatActivity {
                     // process the result
                     double newExchangeRate = result.getData().getDoubleExtra("newExchangeRate", -1);
                     int position = result.getData().getIntExtra("listPosition", -1);
+                    SharedPreferences prefs = getSharedPreferences("shared_prefs_rates", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
 
                     if (position > -1 && newExchangeRate > -1) {
                         CurrencyEntry currencyEntry = (CurrencyEntry) adapter.getItem(position);
                         currencyEntry.exchangeRate = newExchangeRate;
+
+                        // save the exchange rate to shared preferences
+                        editor.putString(currencyEntry.currencyName, String.valueOf(newExchangeRate));
+                        editor.apply();
 
                         // notify the adapter that the data has changed
                         adapter.notifyDataSetChanged();

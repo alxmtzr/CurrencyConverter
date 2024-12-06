@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         // save the current selection to preferences
-        SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("shared_prefs_states", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
         // retrieve the current selection
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         // restore the previous selection from preferences
-        SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("shared_prefs_states", Context.MODE_PRIVATE);
 
         // retrieve the previous selection from shared prefs
         int fromCurrencySelectedItemPosition = prefs.getInt(FROM_SPINNER_POSITION, 0);
@@ -120,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             currencyEntries[i] = new CurrencyEntry(
                     flagImageId,
                     currentCurrency,
-                    exchangeRateDatabase.getExchangeRate(currentCurrency));
+                    getExchangeRate(currentCurrency));
         }
 
         adapter = new CurrencyListAdapter(Arrays.asList(currencyEntries));
@@ -129,6 +128,17 @@ public class MainActivity extends AppCompatActivity {
         spinnerFromValue.setAdapter(adapter);
         spinnerToValue = findViewById(R.id.spinner_to_value);
         spinnerToValue.setAdapter(adapter);
+    }
+
+    private double getExchangeRate(String currentCurrency) {
+        SharedPreferences prefs = getSharedPreferences("shared_prefs_rates", Context.MODE_PRIVATE);
+
+        // return either the saved exchange rate in prefs or the default exchange rate from ExchangeRateDatabase
+        double rate = Double.parseDouble(prefs.getString(currentCurrency, "0"));
+        if (rate == 0) {
+            rate = exchangeRateDatabase.getExchangeRate(currentCurrency);
+        }
+        return rate;
     }
 
     private void setupCalculateButton() {
@@ -244,6 +254,8 @@ public class MainActivity extends AppCompatActivity {
     private void updateCurrencies() {
         FloatRatesApi floatRatesApi = new FloatRatesApi();
         List<CurrencyDTO> currencyDTOList = floatRatesApi.queryCurrencies();
+        SharedPreferences pref = getSharedPreferences("shared_prefs_rates", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
 
         // update the exchange rates in the database
         for (CurrencyDTO entry : currencyDTOList) {
@@ -253,6 +265,10 @@ public class MainActivity extends AppCompatActivity {
             // only update the exchange rate if the currency is in the list
             if (currencyList.contains(currencyName)) {
                 exchangeRateDatabase.setExchangeRate(currencyName, exchangeRate);
+
+                // save the exchange rate to shared preferences
+                editor.putString(currencyName, String.valueOf(exchangeRate));
+                editor.apply();
             }
         }
 
@@ -260,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < adapter.getCount(); i++) {
             CurrencyEntry currencyEntry = (CurrencyEntry) adapter.getItem(i);
             String currencyName = currencyEntry.currencyName;
-            currencyEntry.exchangeRate = exchangeRateDatabase.getExchangeRate(currencyName);
+            currencyEntry.exchangeRate = getExchangeRate(currencyName);
         }
         adapter.notifyDataSetChanged();
     }
