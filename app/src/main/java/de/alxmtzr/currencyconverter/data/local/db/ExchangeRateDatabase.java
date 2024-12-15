@@ -83,7 +83,7 @@ public class ExchangeRateDatabase {
      * @param currency     Currency name (three letters)
      * @param exchangeRate Exchange rate for one euro
      */
-    public void setExchangeRate(String currency, double exchangeRate) {
+    public synchronized void setExchangeRate(String currency, double exchangeRate) {
         CURRENCIES_MAP.get(currency).setRateForOneEuro(exchangeRate);
     }
 

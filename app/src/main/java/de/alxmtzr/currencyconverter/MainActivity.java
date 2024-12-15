@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -29,9 +28,8 @@ import java.util.List;
 
 import de.alxmtzr.currencyconverter.adapter.CurrencyListAdapter;
 import de.alxmtzr.currencyconverter.adapter.entry.CurrencyEntry;
+import de.alxmtzr.currencyconverter.data.CurrencyUpdateRunnable;
 import de.alxmtzr.currencyconverter.data.local.db.ExchangeRateDatabase;
-import de.alxmtzr.currencyconverter.data.model.CurrencyDTO;
-import de.alxmtzr.currencyconverter.data.remote.FloatRatesApi;
 
 public class MainActivity extends AppCompatActivity {
     // constants
@@ -49,10 +47,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // temporary deactivate control mechanism
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
 
         initializeComponents();
         initToolbar();
@@ -241,48 +235,21 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (item.getItemId() == R.id.action_refresh_rates) {
             Toast.makeText(this, R.string.updating_rates, Toast.LENGTH_SHORT).show();
-            // refresh exchange rates from the API
-            updateCurrencies();
+
+            // refresh exchange rates from the API on a new thread
+            CurrencyUpdateRunnable currencyUpdateRunnable = new CurrencyUpdateRunnable(
+                    getSharedPreferences("shared_prefs_rates", Context.MODE_PRIVATE),
+                    currencyList,
+                    adapter,
+                    spinnerFromValue
+            );
+            new Thread(currencyUpdateRunnable).start();
+
             Toast.makeText(this, R.string.rates_updated, Toast.LENGTH_SHORT).show();
             return true;
         } else {
             // the user's action was not recognized. Invoke the superclass to handle it.
             return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void updateCurrencies() {
-        FloatRatesApi floatRatesApi = new FloatRatesApi();
-        List<CurrencyDTO> currencyDTOList = floatRatesApi.queryCurrencies();
-        SharedPreferences pref = getSharedPreferences("shared_prefs_rates", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-
-        // update the exchange rates in the database
-        for (CurrencyDTO entry : currencyDTOList) {
-            String currencyName = entry.code.toUpperCase();
-            double exchangeRate = roundToFourDecimalPlaces(entry.rate);
-
-            // only update the exchange rate if the currency is in the list
-            if (currencyList.contains(currencyName)) {
-                exchangeRateDatabase.setExchangeRate(currencyName, exchangeRate);
-
-                // save the exchange rate to shared preferences
-                editor.putString(currencyName, String.valueOf(exchangeRate));
-                editor.apply();
-            }
-        }
-
-        // update the exchange rates in the adapter
-        for (int i = 0; i < adapter.getCount(); i++) {
-            CurrencyEntry currencyEntry = (CurrencyEntry) adapter.getItem(i);
-            String currencyName = currencyEntry.currencyName;
-            currencyEntry.exchangeRate = getExchangeRate(currencyName);
-        }
-        adapter.notifyDataSetChanged();
-    }
-
-    // helper method to round a double to four decimal places
-    private double roundToFourDecimalPlaces(double value) {
-        return Math.round(value * 10000.0) / 10000.0;
     }
 }
