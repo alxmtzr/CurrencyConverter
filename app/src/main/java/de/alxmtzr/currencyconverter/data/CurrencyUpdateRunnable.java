@@ -12,6 +12,7 @@ import de.alxmtzr.currencyconverter.adapter.entry.CurrencyEntry;
 import de.alxmtzr.currencyconverter.data.local.db.ExchangeRateDatabase;
 import de.alxmtzr.currencyconverter.data.model.CurrencyDTO;
 import de.alxmtzr.currencyconverter.data.remote.FloatRatesApi;
+import de.alxmtzr.currencyconverter.notification.UpdateCurrencyNotifier;
 
 public class CurrencyUpdateRunnable implements Runnable {
 
@@ -21,6 +22,7 @@ public class CurrencyUpdateRunnable implements Runnable {
     private final List<String> currencyList;
     private final CurrencyListAdapter adapter;
     private final Spinner spinnerFromValue;
+    private final UpdateCurrencyNotifier updateCurrencyNotifier;
 
     public CurrencyUpdateRunnable(SharedPreferences prefs, List<String> currencyList, CurrencyListAdapter adapter, Spinner spinnerFromValue) {
         this.floatRatesApi = new FloatRatesApi();
@@ -30,6 +32,8 @@ public class CurrencyUpdateRunnable implements Runnable {
         this.currencyList = currencyList;
         this.adapter = adapter;
         this.spinnerFromValue = spinnerFromValue;
+
+        this.updateCurrencyNotifier = new UpdateCurrencyNotifier(spinnerFromValue.getContext());
     }
 
     @Override
@@ -72,6 +76,7 @@ public class CurrencyUpdateRunnable implements Runnable {
                 }
                 adapter.notifyDataSetChanged();
 
+                updateCurrencyNotifier.showNotification();
                 Toast.makeText(spinnerFromValue.getContext(), R.string.rates_updated, Toast.LENGTH_SHORT).show();
             }
         });
