@@ -2,9 +2,11 @@ package de.alxmtzr.currencyconverter.data;
 
 import android.content.SharedPreferences;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.List;
 
+import de.alxmtzr.currencyconverter.R;
 import de.alxmtzr.currencyconverter.adapter.CurrencyListAdapter;
 import de.alxmtzr.currencyconverter.adapter.entry.CurrencyEntry;
 import de.alxmtzr.currencyconverter.data.local.db.ExchangeRateDatabase;
@@ -69,6 +71,8 @@ public class CurrencyUpdateRunnable implements Runnable {
                     currencyEntry.exchangeRate = getExchangeRate(prefs, currencyName);
                 }
                 adapter.notifyDataSetChanged();
+
+                Toast.makeText(spinnerFromValue.getContext(), R.string.rates_updated, Toast.LENGTH_SHORT).show();
             }
         });
     }

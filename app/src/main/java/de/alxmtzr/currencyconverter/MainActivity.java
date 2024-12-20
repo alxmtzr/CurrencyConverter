@@ -245,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
             );
             new Thread(currencyUpdateRunnable).start();
 
-            Toast.makeText(this, R.string.rates_updated, Toast.LENGTH_SHORT).show();
             return true;
         } else {
             // the user's action was not recognized. Invoke the superclass to handle it.
